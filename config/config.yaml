@@ -1,0 +1,16 @@
+- zone: backyard top  
+  unique_id: 1
+  gpio_pin: 32
+  qos: 2
+- zone: backyard back
+  unique_id: 2
+  gpio_pin: 24
+  qos: 2
+- zone: backyard main
+  unique_id: 3
+  gpio_pin: 44
+  qos: 2
+- zone: front yard
+  unique_id: 4
+  gpio_pin: 24
+  qos: 2

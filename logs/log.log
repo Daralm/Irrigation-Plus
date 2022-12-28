@@ -1,0 +1,4 @@
+2022-12-28 11:44:51,511 - __main__ - INFO - Successfully parsed the config file ./config/config.yaml
+2022-12-28 11:44:51,511 - __main__ - INFO - Successfully created the device with valves: {1: Valve(valve_id=1, zone='backyard top', qos=2, gpio_pin=32, stat=<Status.OFF: 'OFF'>), 2: Valve(valve_id=2, zone='backyard back', qos=2, gpio_pin=24, stat=<Status.OFF: 'OFF'>), 3: Valve(valve_id=3, zone='backyard main', qos=2, gpio_pin=44, stat=<Status.OFF: 'OFF'>), 4: Valve(valve_id=4, zone='front yard', qos=2, gpio_pin=24, stat=<Status.OFF: 'OFF'>)}
+2022-12-28 11:44:51,600 - devices - INFO - Messgae received. Topic: valve_1, payload: b'OFF'
+2022-12-28 11:44:51,600 - devices - INFO - Successfully changes the status of valve 1 to Status.OFF
