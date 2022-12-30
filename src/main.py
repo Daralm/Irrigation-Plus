@@ -4,8 +4,8 @@ import argparse
 from utils import get_logger
 
 
-
 logger = get_logger(__name__)
+
 
 def parse_config(config_path: str) -> dict:
     with open(config_path, 'r') as f:
@@ -17,7 +17,7 @@ def parse_config(config_path: str) -> dict:
 def create_device(config: dict):
     valves: list[Valve] = []
     for item in config:
-        valve = Valve(valve_id=item.get('unique_id'), zone=item.get('zone'), 
+        valve = Valve(valve_id=item.get('unique_id'), zone=item.get('zone'),
                       qos=item.get('qos'), gpio_pin=int(item.get('gpio_pin')))
         valves.append(valve)
 
@@ -42,8 +42,7 @@ def main():
 
     controller.listen('192.168.2.10', 1883)
     controller.report_status('192.168.2.10', 1883)
-    
+
 
 if __name__ == '__main__':
     main()
-    
