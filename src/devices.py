@@ -116,8 +116,7 @@ class Controller:
         return
 
     def _on_message(self, client, userdata, msg) -> None:
-        logger.info(
-            f'Messgae received. Topic: {msg.topic}, payload: {msg.payload}')
+        logger.info(f'Messgae received. Topic: {msg.topic}, payload: {msg.payload}')
 
         status = msg.payload.decode('utf-8')
         if status == 'ON':
