@@ -88,17 +88,29 @@ class Controller:
     def listen(self, host: str, port: int) -> None:
         topics = self.device.topics
         client = Client(client_id='listener', clean_session=True)
-        client.connect(host=host, port=port)
+        try:
+            client.connect(host=host, port=port)
+        except Exception as e:
+            logger.error(e)
+            raise e
         client.on_connect = self._on_connect
         client.on_message = self._on_message
-        client.subscribe(topics)
-
+        try:
+            client.subscribe(topics)
+        except Exception as e:
+            logger.error(e)
+            raise e
         client.loop_start()
         return
 
     def report_status(self, host: str, port: int) -> None:
         client = Client(client_id='publisher', clean_session=True)
-        client.connect(host=host, port=port)
+        try:
+            client.connect(host=host, port=port)
+        except Exception as e:
+            logger.error(e)
+            raise e
+        
         while True:
             for valve in self.device.valves.values():
                 client.publish(topic=valve.topic+'/status', payload=valve.status.value)
