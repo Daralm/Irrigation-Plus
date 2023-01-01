@@ -43,6 +43,9 @@ def main():
     controller.listen('192.168.2.10', 1883)
     controller.report_status('192.168.2.10', 1883)
 
+    # controller.listen('darameybodi.asuscomm.com', 1883)
+    # controller.report_status('darameybodi.asuscomm.com', 1883)
+
 
 if __name__ == '__main__':
     main()

@@ -18,7 +18,7 @@ class Valve:
     zone: str
     qos: int
     gpio_pin: int
-    stat: Status = Status.OFF
+    __stat: Status = Status('OFF')
 
     @property
     def id(self):
@@ -26,13 +26,13 @@ class Valve:
 
     @property
     def status(self):
-        return self.stat
+        return self.__stat
 
     @property
     def topic(self):
         return 'valve_' + str(self.valve_id)
 
-    def set_status(self, stat: Status) -> None:
+    def set_status(self, status: Status) -> None:
         """
             Set the status of the valve.
             Call the set status method on the GPIO
@@ -41,16 +41,10 @@ class Valve:
         # Call GPIO set status function here
 
         # set the status
-        self.stat = stat
+        self.__stat = status
 
-        logger.info(f'Successfully changes the status of valve {self.id} to {self.stat}')
+        logger.info(f'Successfully changes the status of valve {self.id} to {self.__stat}')
         return
-
-    def toggle_status(self):
-        if self.stat == Status.OFF:
-            self.set_status(Status.ON)
-        else:
-            self.set_status(Status.OFF)
 
 
 class Device:
@@ -107,7 +101,7 @@ class Controller:
         client.connect(host=host, port=port)
         while True:
             for valve in self.device.valves.values():
-                client.publish(topic=valve.topic+'/status', payload=valve.status.name)
+                client.publish(topic=valve.topic+'/status', payload=valve.status.value)
             time.sleep(.5)
         return
 
@@ -118,12 +112,8 @@ class Controller:
     def _on_message(self, client, userdata, msg) -> None:
         logger.info(f'Messgae received. Topic: {msg.topic}, payload: {msg.payload}')
 
-        status = msg.payload.decode('utf-8')
-        if status == 'ON':
-            status = Status.ON
-        else:
-            status = Status.OFF
-
-        self.device.set_valve_status(valve_id=int(msg.topic.split('_')[-1]), status=status)
+        status = Status(msg.payload.decode('utf-8'))
+        valve_id = int(msg.topic.split('_')[-1])
+        self.device.set_valve_status(valve_id=valve_id, status=status)
 
         return
