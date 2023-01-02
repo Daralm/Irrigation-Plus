@@ -55,11 +55,14 @@ class Device:
         return f'Device:\n{self.valves}'
 
     def add_valves(self, valves: list[Valve]) -> None:
-        self.valves = {valve.valve_id: valve for valve in valves}
+        if not self.valves:
+            self.valves = {valve.valve_id: valve for valve in valves}
+        else:
+            self.valves.update({valve.valve_id: valve for valve in valves})
         return
 
-    def drop_valve(self, valve_id: str) -> None:
-        self.valves.pop(valve_id, default=None)
+    def drop_valve(self, valve_id: int) -> None:
+        self.valves.pop(valve_id)
         return
 
     def get_valve_status(self, valve_id) -> Status:
@@ -110,7 +113,7 @@ class Controller:
         except Exception as e:
             logger.error(e)
             raise e
-        
+
         while True:
             for valve in self.device.valves.values():
                 client.publish(topic=valve.topic+'/status', payload=valve.status.value)
