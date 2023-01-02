@@ -103,7 +103,12 @@ class Controller:
         except Exception as e:
             logger.error(e)
             raise e
-        client.loop_start()
+        
+        try:
+            client.loop_start()
+        except Exception as e:
+            logger.error(e)
+            raise e
         return
 
     def report_status(self, host: str, port: int) -> None:
