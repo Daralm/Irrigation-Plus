@@ -89,7 +89,7 @@ class Controller:
         self.device = device
 
     def listen(self, host: str, port: int) -> None:
-        topics = self.device.topics
+
         client = Client(client_id='listener', clean_session=True)
         try:
             client.connect(host=host, port=port)
@@ -98,12 +98,7 @@ class Controller:
             raise e
         client.on_connect = self._on_connect
         client.on_message = self._on_message
-        try:
-            client.subscribe(topics)
-        except Exception as e:
-            logger.error(e)
-            raise e
-        
+
         try:
             client.loop_start()
         except Exception as e:
@@ -113,20 +108,28 @@ class Controller:
 
     def report_status(self, host: str, port: int) -> None:
         client = Client(client_id='publisher', clean_session=True)
-        try:
-            client.connect(host=host, port=port)
-        except Exception as e:
-            logger.error(e)
-            raise e
 
         while True:
+            if not client.is_connected():
+                try:
+                    client.connect(host=host, port=port)
+                except Exception as e:
+                    logger.error(e)
+
             for valve in self.device.valves.values():
                 client.publish(topic=valve.topic+'/status', payload=valve.status.value)
             time.sleep(.5)
         return
 
     def _on_connect(self, client, userdata, flags, rc) -> None:
-        print("Connected with result code "+str(rc))
+        logger.info("Connected with result code "+str(rc))
+        topics = self.device.topics
+        try:
+            client.subscribe(topics)
+            logger.info(f'Subscribed to: {topics}')
+        except Exception as e:
+            logger.error(e)
+            raise e
         return
 
     def _on_message(self, client, userdata, msg) -> None:
