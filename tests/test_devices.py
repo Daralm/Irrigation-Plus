@@ -39,8 +39,6 @@ class TestDevice(TestCase):
         # Test the drop_valve method
         self.device.drop_valve(1)
         self.assertEqual(len(self.device.valves), 0)
-        # self.device.drop_valve(2)
-        # self.assertEqual(len(self.device.valves), 0)
 
     def test_get_valve_status(self):
         # Test the get_valve_status method
