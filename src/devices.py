@@ -3,6 +3,7 @@ from enum import Enum
 from paho.mqtt.client import Client
 import time
 from utils import get_logger
+from operations import set_gpio_status
 
 logger = get_logger(__name__)
 
@@ -34,16 +35,18 @@ class Valve:
 
     def set_status(self, status: Status) -> None:
         """
-            Set the status of the valve.
             Call the set status method on the GPIO
+            Set the status of the valve.
         """
 
         # Call GPIO set status function here
+        try:
+            set_gpio_status(pin=self.gpio_pin, status=status)
+            self.__stat = status
+            logger.info(f'Successfully changed the status of valve {self.id} to {self.__stat}')
+        except Exception as e:
+            logger.error(e)
 
-        # set the status
-        self.__stat = status
-
-        logger.info(f'Successfully changes the status of valve {self.id} to {self.__stat}')
         return
 
 
